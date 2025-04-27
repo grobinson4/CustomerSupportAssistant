@@ -1,0 +1,6 @@
+@CustomerSupportAssistant.API_HostAddress = http://localhost:5291
+
+GET {{CustomerSupportAssistant.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
