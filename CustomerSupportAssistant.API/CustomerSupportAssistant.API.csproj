@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.5" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -27,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+  <ProjectReference Include="..\CustomerSupportAssistant.Infrastructure\CustomerSupportAssistant.Infrastructure.csproj" />
     <ProjectReference Include="..\CustomerSupportAssistant.Persistence\CustomerSupportAssistant.Persistence.csproj" />
   </ItemGroup>
 

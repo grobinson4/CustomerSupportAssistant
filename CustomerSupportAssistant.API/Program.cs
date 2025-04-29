@@ -1,11 +1,14 @@
 using CustomerSupportAssistant.Persistence;
 using CustomerSupportAssistant.Persistence.Seed;
+using CustomerSupportAssistant.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using CustomerSupportAssistant.Persistence.Repositories;
 using Swashbuckle.AspNetCore;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Azure;
+using Azure.AI.OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,14 +27,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
+builder.Services.AddSingleton<OpenAIService>();
 
 
 // Other services
-builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-        options.JsonSerializerOptions.WriteIndented = true;
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Optional: Keep PascalCase if needed
     });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -73,6 +79,17 @@ builder.Services.AddSwaggerGen(options =>
 
 );
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowViteDev", builder =>
+    {
+        builder.WithOrigins("http://localhost:5173")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials(); // Important if using auth tokens
+    });
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -104,6 +121,7 @@ if (app.Environment.IsDevelopment())
     options.OAuthScopes($"{builder.Configuration["AzureAd:Audience"]}/access_as_user");
 });
 }
+app.UseCors("AllowViteDev");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
