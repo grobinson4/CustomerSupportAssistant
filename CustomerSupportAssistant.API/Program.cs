@@ -1,5 +1,6 @@
 using CustomerSupportAssistant.Persistence;
 using CustomerSupportAssistant.Persistence.Seed;
+using CustomerSupportAssistant.Business.Services;
 using CustomerSupportAssistant.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using CustomerSupportAssistant.Persistence.Repositories;
@@ -27,7 +28,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
+builder.Services.AddScoped<InquiryProcessorService>();
 builder.Services.AddSingleton<OpenAIService>();
+builder.Services.AddLogging();
+builder.Services.AddSingleton(_ =>
+{
+    var endpoint = new Uri(builder.Configuration["AzureOpenAI:Endpoint"]);
+    var key = new AzureKeyCredential(builder.Configuration["AzureOpenAI:Key"]);
+    return new OpenAIClient(endpoint, key);
+});
 
 
 // Other services

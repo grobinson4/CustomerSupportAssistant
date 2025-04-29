@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+  <ProjectReference Include="..\CustomerSupportAssistant.Business\CustomerSupportAssistant.Business.csproj" />
   <ProjectReference Include="..\CustomerSupportAssistant.Infrastructure\CustomerSupportAssistant.Infrastructure.csproj" />
     <ProjectReference Include="..\CustomerSupportAssistant.Persistence\CustomerSupportAssistant.Persistence.csproj" />
   </ItemGroup>

@@ -3,6 +3,11 @@
   <ItemGroup>
     <ProjectReference Include="..\CustomerSupportAssistant.Domain\CustomerSupportAssistant.Domain.csproj" />
     <ProjectReference Include="..\CustomerSupportAssistant.Persistence\CustomerSupportAssistant.Persistence.csproj" />
+    <ProjectReference Include="..\CustomerSupportAssistant.Infrastructure\CustomerSupportAssistant.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.5" />
   </ItemGroup>
 
   <PropertyGroup>
